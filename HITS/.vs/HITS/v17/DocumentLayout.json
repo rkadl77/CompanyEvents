@@ -5,6 +5,30 @@
     {
       "AbsoluteMoniker": "D:0:0:{14B733C2-5AAF-4BAC-BD42-5C6DC4105274}|HITS\\HITS.csproj|c:\\users\\rkadl\\source\\repos\\hits\\hits\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{14B733C2-5AAF-4BAC-BD42-5C6DC4105274}|HITS\\HITS.csproj|solutionrelative:hits\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\rkadl\\source\\repos\\HITS\\HITS\\Data\\Migrations\\20250904132209_InitialIdentity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:HITS\\Data\\Migrations\\20250904132209_InitialIdentity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{14B733C2-5AAF-4BAC-BD42-5C6DC4105274}|HITS\\HITS.csproj|c:\\users\\rkadl\\source\\repos\\hits\\hits\\controllers\\eventscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{14B733C2-5AAF-4BAC-BD42-5C6DC4105274}|HITS\\HITS.csproj|solutionrelative:hits\\controllers\\eventscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{14B733C2-5AAF-4BAC-BD42-5C6DC4105274}|HITS\\HITS.csproj|c:\\users\\rkadl\\source\\repos\\hits\\hits\\models\\dtos\\createcompanydto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{14B733C2-5AAF-4BAC-BD42-5C6DC4105274}|HITS\\HITS.csproj|solutionrelative:hits\\models\\dtos\\createcompanydto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{14B733C2-5AAF-4BAC-BD42-5C6DC4105274}|HITS\\HITS.csproj|c:\\users\\rkadl\\source\\repos\\hits\\hits\\models\\dtos\\createeventdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{14B733C2-5AAF-4BAC-BD42-5C6DC4105274}|HITS\\HITS.csproj|solutionrelative:hits\\models\\dtos\\createeventdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{14B733C2-5AAF-4BAC-BD42-5C6DC4105274}|HITS\\HITS.csproj|c:\\users\\rkadl\\source\\repos\\hits\\hits\\services\\eventservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{14B733C2-5AAF-4BAC-BD42-5C6DC4105274}|HITS\\HITS.csproj|solutionrelative:hits\\services\\eventservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{14B733C2-5AAF-4BAC-BD42-5C6DC4105274}|HITS\\HITS.csproj|c:\\users\\rkadl\\source\\repos\\hits\\hits\\hits.http||{5703B403-55E7-4C63-8C88-A8F52C7A45C5}",
+      "RelativeMoniker": "D:0:0:{14B733C2-5AAF-4BAC-BD42-5C6DC4105274}|HITS\\HITS.csproj|solutionrelative:hits\\hits.http||{5703B403-55E7-4C63-8C88-A8F52C7A45C5}"
     }
   ],
   "DocumentGroupContainers": [
@@ -14,8 +38,74 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 5,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "HITS.http",
+              "DocumentMoniker": "C:\\Users\\rkadl\\source\\repos\\HITS\\HITS\\HITS.http",
+              "RelativeDocumentMoniker": "HITS\\HITS.http",
+              "ToolTip": "C:\\Users\\rkadl\\source\\repos\\HITS\\HITS\\HITS.http",
+              "RelativeToolTip": "HITS\\HITS.http",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003502|",
+              "WhenOpened": "2025-09-04T10:33:16.757Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "20250904132209_InitialIdentity.cs",
+              "DocumentMoniker": "C:\\Users\\rkadl\\source\\repos\\HITS\\HITS\\Data\\Migrations\\20250904132209_InitialIdentity.cs",
+              "RelativeDocumentMoniker": "HITS\\Data\\Migrations\\20250904132209_InitialIdentity.cs",
+              "ToolTip": "C:\\Users\\rkadl\\source\\repos\\HITS\\HITS\\Data\\Migrations\\20250904132209_InitialIdentity.cs",
+              "RelativeToolTip": "HITS\\Data\\Migrations\\20250904132209_InitialIdentity.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-04T13:22:09.492Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "EventsController.cs",
+              "DocumentMoniker": "C:\\Users\\rkadl\\source\\repos\\HITS\\HITS\\Controllers\\EventsController.cs",
+              "RelativeDocumentMoniker": "HITS\\Controllers\\EventsController.cs",
+              "ToolTip": "C:\\Users\\rkadl\\source\\repos\\HITS\\HITS\\Controllers\\EventsController.cs",
+              "RelativeToolTip": "HITS\\Controllers\\EventsController.cs",
+              "ViewState": "AgIAAD4AAAAAAAAAAAAIwA0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-04T13:08:33.86Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "CreateCompanyDto.cs",
+              "DocumentMoniker": "C:\\Users\\rkadl\\source\\repos\\HITS\\HITS\\Models\\DTOs\\CreateCompanyDto.cs",
+              "RelativeDocumentMoniker": "HITS\\Models\\DTOs\\CreateCompanyDto.cs",
+              "ToolTip": "C:\\Users\\rkadl\\source\\repos\\HITS\\HITS\\Models\\DTOs\\CreateCompanyDto.cs",
+              "RelativeToolTip": "HITS\\Models\\DTOs\\CreateCompanyDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-04T13:07:05.152Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "CreateEventDto.cs",
+              "DocumentMoniker": "C:\\Users\\rkadl\\source\\repos\\HITS\\HITS\\Models\\DTOs\\CreateEventDto.cs",
+              "RelativeDocumentMoniker": "HITS\\Models\\DTOs\\CreateEventDto.cs",
+              "ToolTip": "C:\\Users\\rkadl\\source\\repos\\HITS\\HITS\\Models\\DTOs\\CreateEventDto.cs",
+              "RelativeToolTip": "HITS\\Models\\DTOs\\CreateEventDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-04T13:06:31.755Z",
+              "EditorCaption": ""
+            },
             {
               "$type": "Document",
               "DocumentIndex": 0,
@@ -24,10 +114,27 @@
               "RelativeDocumentMoniker": "HITS\\Program.cs",
               "ToolTip": "C:\\Users\\rkadl\\source\\repos\\HITS\\HITS\\Program.cs",
               "RelativeToolTip": "HITS\\Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAXAAAAAAAAAA==",
+              "ViewState": "AgIAACoAAAAAAAAAAAAAAEgAAAAgAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-04T10:00:01.095Z",
+              "WhenOpened": "2025-09-04T13:04:05.611Z",
               "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "EventService.cs",
+              "DocumentMoniker": "C:\\Users\\rkadl\\source\\repos\\HITS\\HITS\\Services\\EventService.cs",
+              "RelativeDocumentMoniker": "HITS\\Services\\EventService.cs",
+              "ToolTip": "C:\\Users\\rkadl\\source\\repos\\HITS\\HITS\\Services\\EventService.cs",
+              "RelativeToolTip": "HITS\\Services\\EventService.cs",
+              "ViewState": "AgIAAC8AAAAAAAAAAAAYwEsAAAAtAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-04T13:03:42.82Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:1:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
             }
           ]
         }
