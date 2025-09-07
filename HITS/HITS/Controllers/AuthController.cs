@@ -1,7 +1,10 @@
 ﻿using HITS.Models.DTOs;
 using HITS.Models.Entities;
+using HITS.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 
 namespace HITS.Controllers
 {
@@ -11,15 +14,22 @@ namespace HITS.Controllers
     {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
+        private readonly JwtService _jwtService;
+        private readonly IConfiguration _configuration;
 
-        public AuthController(UserManager<User> userManager, SignInManager<User> signInManager)
+        public AuthController(UserManager<User> userManager,
+                            SignInManager<User> signInManager,
+                            JwtService jwtService,
+                            IConfiguration configuration)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _jwtService = jwtService;
+            _configuration = configuration;
         }
 
-        // POST: api/auth/register
         [HttpPost("register")]
+        [AllowAnonymous]
         public async Task<IActionResult> Register([FromBody] RegisterModel model)
         {
             if (!ModelState.IsValid)
@@ -34,14 +44,13 @@ namespace HITS.Controllers
                 FirstName = model.FirstName,
                 LastName = model.LastName,
                 Role = model.Role,
-                IsApproved = model.Role == "Deanery" // Деканат подтверждается автоматически
+                IsApproved = model.Role == "Deanery"
             };
 
             var result = await _userManager.CreateAsync(user, model.Password);
 
             if (result.Succeeded)
             {
-                // Добавляем роль пользователю
                 await _userManager.AddToRoleAsync(user, model.Role);
                 return Ok(new { message = "User registered successfully. Waiting for approval." });
             }
@@ -49,9 +58,9 @@ namespace HITS.Controllers
             return BadRequest(result.Errors);
         }
 
-        // POST: api/auth/login
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginModel model)
+        [AllowAnonymous]
+        public async Task<ActionResult<AuthResponse>> Login([FromBody] LoginModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -64,24 +73,38 @@ namespace HITS.Controllers
                 return Unauthorized(new { message = "Invalid login attempt" });
             }
 
-            // Проверяем, подтвержден ли аккаунт (кроме деканата)
             if (user.Role != "Deanery" && !user.IsApproved)
             {
                 return Unauthorized(new { message = "Account not approved yet" });
             }
 
-            var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, false, false);
+            var result = await _signInManager.CheckPasswordSignInAsync(user, model.Password, false);
 
             if (result.Succeeded)
             {
-                return Ok(new { message = "Login successful" });
+                var token = _jwtService.GenerateToken(user);
+
+                return new AuthResponse
+                {
+                    Token = token,
+                    Expiration = DateTime.Now.AddMinutes(Convert.ToDouble(_configuration["Jwt:ExpiryInMinutes"])),
+                    User = new UserDto
+                    {
+                        Id = user.Id,
+                        Email = user.Email,
+                        FirstName = user.FirstName,
+                        LastName = user.LastName,
+                        Role = user.Role,
+                        IsApproved = user.IsApproved
+                    }
+                };
             }
 
             return Unauthorized(new { message = "Invalid login attempt" });
         }
 
-        // POST: api/auth/logout
         [HttpPost("logout")]
+        [Authorize]
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();

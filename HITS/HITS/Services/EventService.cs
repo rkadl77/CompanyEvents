@@ -2,6 +2,7 @@
 using HITS.Interfaces;
 using HITS.Models.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 
 namespace HITS.Services
 {
@@ -16,9 +17,18 @@ namespace HITS.Services
 
         public async Task<Event> CreateEventAsync(Event newEvent, string managerId)
         {
-            var manager = await _context.Users.FindAsync(managerId);
-            if (manager == null || manager.CompanyId == null)
-                throw new Exception("Manager not found or not associated with company");
+            var manager = await _context.Users
+                .Include(u => u.Company)
+                .FirstOrDefaultAsync(u => u.Id == managerId);
+
+            if (manager == null)
+                throw new Exception("Manager not found");
+
+            if (manager.CompanyId == null)
+                throw new Exception("Manager is not associated with any company");
+
+            if (!manager.IsApproved)
+                throw new Exception("Manager account is not approved yet");
 
             newEvent.CompanyId = manager.CompanyId.Value;
             _context.Events.Add(newEvent);
@@ -34,21 +44,63 @@ namespace HITS.Services
                 .FirstOrDefaultAsync(e => e.Id == id);
         }
 
-        public async Task<IEnumerable<Event>> GetAllEventsAsync()
+        public async Task<IEnumerable<Event>> GetAllEventsAsync(bool upcomingOnly = true)
         {
-            return await _context.Events
+            var query = _context.Events
                 .Include(e => e.Company)
-                .Where(e => e.Date > DateTime.Now)
-                .ToListAsync();
+                .Include(e => e.Participants)
+                .AsQueryable();
+
+            if (upcomingOnly)
+            {
+                query = query.Where(e => e.Date > DateTime.Now);
+            }
+
+            return await query.OrderBy(e => e.Date).ToListAsync();
         }
 
-        public async Task<IEnumerable<Event>> GetCompanyEventsAsync(Guid companyId)
+        public async Task<IEnumerable<Event>> GetCompanyEventsAsync(Guid companyId, bool upcomingOnly = true)
+        {
+            var query = _context.Events
+                .Include(e => e.Company)
+                .Include(e => e.Participants)
+                .Where(e => e.CompanyId == companyId)
+                .AsQueryable();
+
+            if (upcomingOnly)
+            {
+                query = query.Where(e => e.Date > DateTime.Now);
+            }
+
+            return await query.OrderBy(e => e.Date).ToListAsync();
+        }
+
+        public async Task<IEnumerable<Event>> GetUserEventsAsync(string userId)
         {
             return await _context.Events
                 .Include(e => e.Company)
                 .Include(e => e.Participants)
-                .Where(e => e.CompanyId == companyId)
+                .Where(e => e.Participants.Any(p => p.Id == userId))
+                .OrderBy(e => e.Date)
                 .ToListAsync();
+        }
+
+        public async Task<IEnumerable<User>> GetEventParticipantsAsync(Guid eventId, string managerId)
+        {
+            var eventObj = await _context.Events
+                .Include(e => e.Participants)
+                .Include(e => e.Company)
+                .ThenInclude(c => c.Managers)
+                .FirstOrDefaultAsync(e => e.Id == eventId);
+
+            if (eventObj == null)
+                throw new Exception("Event not found");
+
+            var isManagerAuthorized = eventObj.Company.Managers.Any(m => m.Id == managerId);
+            if (!isManagerAuthorized)
+                throw new UnauthorizedAccessException("Manager not authorized to view this event's participants");
+
+            return eventObj.Participants.Where(p => p.IsApproved);
         }
 
         public async Task<bool> RegisterForEventAsync(Guid eventId, string studentId)
@@ -59,8 +111,19 @@ namespace HITS.Services
 
             var student = await _context.Users.FindAsync(studentId);
 
-            if (eventObj == null || student == null) return false;
+            if (eventObj == null || student == null)
+                return false;
+
+            if (!student.IsApproved)
+                return false;
+
             if (eventObj.RegistrationDeadline.HasValue && eventObj.RegistrationDeadline < DateTime.Now)
+                return false;
+
+            if (eventObj.Participants.Any(p => p.Id == studentId))
+                return false;
+
+            if (eventObj.Date < DateTime.Now)
                 return false;
 
             eventObj.Participants.Add(student);
@@ -68,10 +131,20 @@ namespace HITS.Services
             return true;
         }
 
+        public async Task<bool> CheckRegistrationDeadlineAsync(Guid eventId)
+        {
+            var eventObj = await _context.Events.FindAsync(eventId);
+            if (eventObj == null)
+                return false;
+
+            return !eventObj.RegistrationDeadline.HasValue || eventObj.RegistrationDeadline >= DateTime.Now;
+        }
+
         public async Task<bool> DeleteEventAsync(Guid eventId)
         {
             var eventObj = await _context.Events.FindAsync(eventId);
-            if (eventObj == null) return false;
+            if (eventObj == null)
+                return false;
 
             _context.Events.Remove(eventObj);
             await _context.SaveChangesAsync();
