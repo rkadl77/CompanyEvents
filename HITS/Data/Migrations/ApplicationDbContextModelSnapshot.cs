@@ -89,6 +89,29 @@ namespace HITS.Data.Migrations
                     b.ToTable("Events");
                 });
 
+            modelBuilder.Entity("HITS.Models.Entities.GoogleAuthToken", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("AccessToken")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("ExpiryDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("RefreshToken")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("UserId");
+
+                    b.ToTable("GoogleAuthTokens");
+                });
+
             modelBuilder.Entity("HITS.Models.Entities.User", b =>
                 {
                     b.Property<string>("Id")
@@ -328,6 +351,17 @@ namespace HITS.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Company");
+                });
+
+            modelBuilder.Entity("HITS.Models.Entities.GoogleAuthToken", b =>
+                {
+                    b.HasOne("HITS.Models.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("HITS.Models.Entities.User", b =>

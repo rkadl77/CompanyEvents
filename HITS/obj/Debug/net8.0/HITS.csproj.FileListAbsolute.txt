@@ -120,4 +120,9 @@ C:\Users\rkadl\source\repos\HITS\HITS\bin\Debug\net8.0\HITS.runtimeconfig.json
 C:\Users\rkadl\source\repos\HITS\HITS\bin\Debug\net8.0\HITS.pdb
 C:\Users\rkadl\source\repos\HITS\HITS\obj\Debug\net8.0\HITS.genruntimeconfig.cache
 C:\Users\rkadl\source\repos\HITS\HITS\obj\Debug\net8.0\ref\HITS.dll
-C:\Users\rkadl\source\repos\HITS\HITS\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
+C:\Users\rkadl\source\repos\HITS\HITS\bin\Debug\net8.0\Google.Apis.dll
+C:\Users\rkadl\source\repos\HITS\HITS\bin\Debug\net8.0\Google.Apis.Auth.dll
+C:\Users\rkadl\source\repos\HITS\HITS\bin\Debug\net8.0\Google.Apis.Calendar.v3.dll
+C:\Users\rkadl\source\repos\HITS\HITS\bin\Debug\net8.0\Google.Apis.Core.dll
+C:\Users\rkadl\source\repos\HITS\HITS\bin\Debug\net8.0\System.Management.dll
+C:\Users\rkadl\source\repos\HITS\HITS\bin\Debug\net8.0\runtimes\win\lib\net7.0\System.Management.dll

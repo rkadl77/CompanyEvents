@@ -373,6 +373,78 @@
     ]
   },
   {
+    "ContainingType": "HITS.Controllers.GoogleAuthController",
+    "Method": "GetAuthUrl",
+    "RelativePath": "api/GoogleAuth/auth-url",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "HITS.Controllers.GoogleAuthController",
+    "Method": "Callback",
+    "RelativePath": "api/GoogleAuth/callback",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "code",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "state",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "HITS.Controllers.GoogleAuthController",
+    "Method": "DebugSaveTokens",
+    "RelativePath": "api/GoogleAuth/debug-save",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "code",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "HITS.Controllers.GoogleAuthController",
+    "Method": "GetStatus",
+    "RelativePath": "api/GoogleAuth/status",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "HITS.Controllers.GoogleAuthController",
+    "Method": "TestAuth",
+    "RelativePath": "api/GoogleAuth/test-auth",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "HITS.Controllers.UsersController",
     "Method": "GetUser",
     "RelativePath": "api/Users/{id}",

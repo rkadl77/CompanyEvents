@@ -47,3 +47,10 @@ C:\Users\rkadl\source\repos\HITS\HITS.TelegramBot\obj\Debug\net8.0\refint\HITS.T
 C:\Users\rkadl\source\repos\HITS\HITS.TelegramBot\obj\Debug\net8.0\HITS.TelegramBot.pdb
 C:\Users\rkadl\source\repos\HITS\HITS.TelegramBot\obj\Debug\net8.0\HITS.TelegramBot.genruntimeconfig.cache
 C:\Users\rkadl\source\repos\HITS\HITS.TelegramBot\obj\Debug\net8.0\ref\HITS.TelegramBot.dll
+C:\Users\rkadl\source\repos\HITS\HITS.TelegramBot\bin\Debug\net8.0\Google.Apis.dll
+C:\Users\rkadl\source\repos\HITS\HITS.TelegramBot\bin\Debug\net8.0\Google.Apis.Auth.dll
+C:\Users\rkadl\source\repos\HITS\HITS.TelegramBot\bin\Debug\net8.0\Google.Apis.Calendar.v3.dll
+C:\Users\rkadl\source\repos\HITS\HITS.TelegramBot\bin\Debug\net8.0\Google.Apis.Core.dll
+C:\Users\rkadl\source\repos\HITS\HITS.TelegramBot\bin\Debug\net8.0\System.CodeDom.dll
+C:\Users\rkadl\source\repos\HITS\HITS.TelegramBot\bin\Debug\net8.0\System.Management.dll
+C:\Users\rkadl\source\repos\HITS\HITS.TelegramBot\bin\Debug\net8.0\runtimes\win\lib\net7.0\System.Management.dll

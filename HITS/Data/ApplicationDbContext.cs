@@ -13,6 +13,8 @@ namespace HITS.Data
 
         public DbSet<Company> Companies { get; set; }
         public DbSet<Event> Events { get; set; }
+        public DbSet<GoogleAuthToken> GoogleAuthTokens { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -39,6 +41,13 @@ namespace HITS.Data
                 .WithMany(c => c.Events)
                 .HasForeignKey(e => e.CompanyId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<GoogleAuthToken>()
+        .HasKey(g => g.UserId);
+
+            builder.Entity<GoogleAuthToken>()
+                .Property(g => g.RefreshToken)
+                .IsRequired(false); 
         }
     }
 }

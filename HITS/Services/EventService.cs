@@ -2,17 +2,18 @@
 using HITS.Interfaces;
 using HITS.Models.Entities;
 using Microsoft.EntityFrameworkCore;
-using System.Data;
 
 namespace HITS.Services
 {
     public class EventService : IEventService
     {
         private readonly ApplicationDbContext _context;
+        private readonly IGoogleCalendarService _googleCalendarService;
 
-        public EventService(ApplicationDbContext context)
+        public EventService(ApplicationDbContext context, IGoogleCalendarService googleCalendarService)
         {
             _context = context;
+            _googleCalendarService = googleCalendarService;
         }
 
         public async Task<Event> CreateEventAsync(Event newEvent, string managerId)
@@ -128,6 +129,21 @@ namespace HITS.Services
 
             eventObj.Participants.Add(student);
             await _context.SaveChangesAsync();
+
+            try
+            {
+                var hasCalendarAccess = await _googleCalendarService.HasCalendarAccessAsync(studentId);
+
+                if (hasCalendarAccess)
+                {
+                    await _googleCalendarService.AddEventToCalendarAsync(studentId, eventObj);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Failed to add event to Google Calendar: {ex.Message}");
+            }
+
             return true;
         }
 
