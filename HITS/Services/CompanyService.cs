@@ -20,15 +20,17 @@ namespace HITS.Services
 
             try
             {
-                _context.Companies.Add(company);
-                await _context.SaveChangesAsync();
-
+                // ПРОВЕРКА: У менеджера не должно быть компании
                 var manager = await _context.Users.FindAsync(managerId);
                 if (manager == null)
                     throw new Exception("Manager not found");
-
+                if (manager.CompanyId != null)
+                    throw new Exception("Manager already has a company");
                 if (!manager.IsApproved)
                     throw new Exception("Manager account is not approved yet");
+
+                _context.Companies.Add(company);
+                await _context.SaveChangesAsync();
 
                 manager.CompanyId = company.Id;
                 await _context.SaveChangesAsync();

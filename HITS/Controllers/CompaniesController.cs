@@ -189,5 +189,72 @@ namespace HITS.Controllers
                 return StatusCode(500, new { message = "Internal server error", error = ex.Message });
             }
         }
+        [HttpGet("{id}/managers")]
+        [Authorize(Roles = "CompanyManager,Deanery")]
+        public async Task<ActionResult<IEnumerable<UserDto>>> GetCompanyManagers(Guid id)
+        {
+            try
+            {
+                var company = await _companyService.GetCompanyByIdAsync(id);
+                if (company == null)
+                {
+                    return NotFound(new { message = "Company not found" });
+                }
+
+                var currentUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                var isAuthorized = User.IsInRole("Deanery") || company.Managers.Any(m => m.Id == currentUserId);
+                if (!isAuthorized)
+                {
+                    return Forbid();
+                }
+
+                var managerDtos = company.Managers.Select(m => new UserDto
+                {
+                    Id = m.Id,
+                    Email = m.Email,
+                    FirstName = m.FirstName,
+                    LastName = m.LastName,
+                    Role = m.Role,
+                    IsApproved = m.IsApproved
+                });
+
+                return Ok(managerDtos);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Internal server error", error = ex.Message });
+            }
+        }
+        [HttpDelete("{companyId}/managers/{managerId}")]
+        [Authorize(Roles = "CompanyManager,Deanery")]
+        public async Task<IActionResult> RemoveManagerFromCompany(Guid companyId, string managerId)
+        {
+            var currentUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (string.IsNullOrEmpty(currentUserId))
+            {
+                return Unauthorized(new { message = "User not authenticated" });
+            }
+
+            try
+            {
+                var result = await _companyService.RemoveManagerFromCompanyAsync(companyId, managerId, currentUserId);
+
+                if (!result)
+                {
+                    return BadRequest(new { message = "Failed to remove manager from company." });
+                }
+
+                return Ok(new { message = "Manager removed from company successfully" });
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Forbid(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
     }
 }

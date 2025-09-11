@@ -23,24 +23,21 @@ namespace HITS.Services
             _context = context;
             _configuration = configuration;
         }
-
         public async Task<string> GetAuthUrlAsync(string userId, string redirectUri)
         {
-            var clientSecrets = new ClientSecrets
-            {
-                ClientId = _configuration["GoogleCalendar:ClientId"],
-                ClientSecret = _configuration["GoogleCalendar:ClientSecret"]
-            };
+            // Ваши реальные credentials из appsettings.json
+            var clientId = "726099358359-po8mspe2jsl4n3khcl69mgh49bmkkb6j.apps.googleusercontent.com";
 
-            var flow = new GoogleAuthorizationCodeFlow(new GoogleAuthorizationCodeFlow.Initializer
-            {
-                ClientSecrets = clientSecrets,
-                Scopes = _scopes
-            });
+            var authUrl = "https://accounts.google.com/o/oauth2/v2/auth?" +
+                         $"client_id={clientId}&" +
+                         $"redirect_uri={Uri.EscapeDataString(redirectUri)}&" +
+                         "response_type=code&" +
+                         "scope=https://www.googleapis.com/auth/calendar.events&" +
+                         "access_type=offline&" +
+                         "prompt=consent&" +
+                         $"state={Uri.EscapeDataString(userId)}";
 
-            var url = flow.CreateAuthorizationCodeRequest(redirectUri);
-            url.State = userId;
-            return url.Build().AbsoluteUri;
+            return authUrl;
         }
         public async Task<bool> SaveTokensAsync(string userId, string code, string redirectUri)
         {

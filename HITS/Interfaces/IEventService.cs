@@ -14,5 +14,8 @@ namespace HITS.Interfaces
         Task<bool> RegisterForEventAsync(Guid eventId, string studentId);
         Task<bool> DeleteEventAsync(Guid eventId);
         Task<bool> CheckRegistrationDeadlineAsync(Guid eventId);
+        Task<bool> UpdateEventAsync(Guid eventId, UpdateEventDto updateEventDto, string managerId);
+
+        Task<bool> UnregisterFromEventAsync(Guid eventId, string studentId);
     }
 }

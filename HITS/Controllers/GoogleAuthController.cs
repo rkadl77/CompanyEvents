@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using HITS.Models.Entities;
 
 namespace HITS.Controllers
 {
@@ -103,5 +104,30 @@ namespace HITS.Controllers
                 });
             }
         }
+
+        [HttpGet("test-add-event")]
+        [Authorize]
+        public async Task<IActionResult> TestAddEvent()
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            var testEvent = new Event
+            {
+                Title = "ТЕСТОВОЕ СОБЫТИЕ из HITS",
+                Description = "Это тест добавления в календарь",
+                Location = "Тестовая локация",
+                Date = DateTime.Now.AddDays(1).Date.AddHours(10) 
+            };
+
+            var success = await _googleCalendarService.AddEventToCalendarAsync(userId, testEvent);
+
+            return Ok(new
+            {
+                Success = success,
+                Message = success ? "Тестовое событие добавлено" : "Ошибка добавления",
+                EventTime = testEvent.Date
+            });
+        }
     }
+
 }

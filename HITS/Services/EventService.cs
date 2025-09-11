@@ -256,5 +256,53 @@ namespace HITS.Services
             await _context.SaveChangesAsync();
             return true;
         }
+        public async Task<bool> UpdateEventAsync(Guid eventId, UpdateEventDto updateEventDto, string managerId)
+        {
+            var eventObj = await _context.Events
+                .Include(e => e.Company)
+                .ThenInclude(c => c.Managers)
+                .FirstOrDefaultAsync(e => e.Id == eventId);
+
+            if (eventObj == null)
+                return false;
+
+            var isManagerAuthorized = eventObj.Company.Managers.Any(m => m.Id == managerId);
+            if (!isManagerAuthorized)
+                throw new UnauthorizedAccessException("Manager not authorized to update this event");
+
+            if (updateEventDto.Title != null) eventObj.Title = updateEventDto.Title;
+            if (updateEventDto.Description != null) eventObj.Description = updateEventDto.Description;
+            if (updateEventDto.Location != null) eventObj.Location = updateEventDto.Location;
+            if (updateEventDto.Date.HasValue) eventObj.Date = updateEventDto.Date.Value;
+            if (updateEventDto.RegistrationDeadline.HasValue) eventObj.RegistrationDeadline = updateEventDto.RegistrationDeadline.Value;
+
+            if (eventObj.RegistrationDeadline.HasValue && eventObj.RegistrationDeadline >= eventObj.Date)
+            {
+                throw new Exception("Registration deadline must be earlier than the event date.");
+            }
+
+            await _context.SaveChangesAsync();
+            return true;
+        }
+        public async Task<bool> UnregisterFromEventAsync(Guid eventId, string studentId)
+        {
+            var eventObj = await _context.Events
+                .Include(e => e.Participants)
+                .FirstOrDefaultAsync(e => e.Id == eventId);
+
+            if (eventObj == null) return false;
+
+            var student = eventObj.Participants.FirstOrDefault(p => p.Id == studentId);
+            if (student == null) return false; 
+
+            eventObj.Participants.Remove(student);
+            await _context.SaveChangesAsync();
+
+            // TODO: Здесь позже добавим удаление из Google Calendar
+            // await _googleCalendarService.RemoveEventFromCalendarAsync(studentId, calendarEventId);
+
+            return true;
+        }
+
     }
 }

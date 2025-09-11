@@ -37,6 +37,12 @@ namespace HITS.Controllers
                 return BadRequest(ModelState);
             }
 
+            var allowedRoles = new[] { "Deanery", "CompanyManager", "Student" };
+            if (!allowedRoles.Contains(model.Role))
+            {
+                return BadRequest(new { message = $"Invalid role. Allowed roles: {string.Join(", ", allowedRoles)}" });
+            }
+
             var user = new User
             {
                 UserName = model.Email,

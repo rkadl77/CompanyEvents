@@ -128,15 +128,24 @@ namespace HITS.Controllers
         [Authorize(Roles = "CompanyManager,Deanery")]
         public async Task<ActionResult<EventDto>> CreateEvent(CreateEventDto createEventDto)
         {
+            // 1. Проверка: дата события не может быть в прошлом
+            if (createEventDto.Date < DateTime.Now)
+            {
+                return BadRequest(new { message = "Event date cannot be in the past" });
+            }
+
+            // 2. Проверка: если указан дедлайн, он не может быть в прошлом
             if (createEventDto.RegistrationDeadline.HasValue &&
                 createEventDto.RegistrationDeadline < DateTime.Now)
             {
                 return BadRequest(new { message = "Registration deadline cannot be in the past" });
             }
 
-            if (createEventDto.Date < DateTime.Now)
+            // 3. НОВАЯ ПРОВЕРКА: если указан дедлайн, он должен быть РАНЬШЕ даты события
+            if (createEventDto.RegistrationDeadline.HasValue &&
+                createEventDto.RegistrationDeadline >= createEventDto.Date)
             {
-                return BadRequest(new { message = "Event date cannot be in the past" });
+                return BadRequest(new { message = "Registration deadline must be earlier than the event date." });
             }
 
             var managerId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -221,6 +230,72 @@ namespace HITS.Controllers
             }
 
             return NoContent();
+        }
+        [HttpPut("{id}")]
+        [Authorize(Roles = "CompanyManager,Deanery")]
+        public async Task<IActionResult> UpdateEvent(Guid id, [FromBody] UpdateEventDto updateEventDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (updateEventDto.RegistrationDeadline.HasValue && updateEventDto.RegistrationDeadline < DateTime.Now)
+            {
+                return BadRequest(new { message = "Registration deadline cannot be in the past" });
+            }
+            if (updateEventDto.Date.HasValue && updateEventDto.Date < DateTime.Now)
+            {
+                return BadRequest(new { message = "Event date cannot be in the past" });
+            }
+
+            var managerId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (string.IsNullOrEmpty(managerId))
+            {
+                return Unauthorized();
+            }
+
+            try
+            {
+                var result = await _eventService.UpdateEventAsync(id, updateEventDto, managerId);
+
+                if (!result)
+                {
+                    return NotFound(new { message = "Event not found" });
+                }
+
+                return Ok(new { message = "Event updated successfully" });
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Forbid(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        [HttpDelete("{id}/register")]
+        [Authorize(Roles = "Student")]
+        public async Task<IActionResult> UnregisterFromEvent(Guid id)
+        {
+            var studentId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (string.IsNullOrEmpty(studentId))
+            {
+                return Unauthorized();
+            }
+
+            var result = await _eventService.UnregisterFromEventAsync(id, studentId);
+
+            if (!result)
+            {
+                return BadRequest(new { message = "Failed to unregister from event. You might not be registered for it." });
+            }
+
+            return Ok(new { message = "Successfully unregistered from event" });
         }
     }
 }
