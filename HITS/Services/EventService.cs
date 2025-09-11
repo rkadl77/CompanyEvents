@@ -136,6 +136,41 @@ namespace HITS.Services
                 .ToListAsync();
         }
 
+        public async Task<IEnumerable<EventDto>> GetManagerEventsAsync(string managerId)
+        {
+            var manager = await _context.Users
+                .Include(u => u.Company)
+                .FirstOrDefaultAsync(u => u.Id == managerId);
+
+            if (manager == null || manager.CompanyId == null)
+                return new List<EventDto>();
+
+            return await _context.Events
+                .Include(e => e.Company)
+                .Include(e => e.Participants)
+                .Where(e => e.CompanyId == manager.CompanyId)
+                .OrderBy(e => e.Date)
+                .Select(e => new EventDto
+                {
+                    Id = e.Id,
+                    Title = e.Title,
+                    Description = e.Description,
+                    Date = e.Date,
+                    Location = e.Location,
+                    RegistrationDeadline = e.RegistrationDeadline,
+                    CompanyId = e.CompanyId,
+                    CompanyName = e.Company.Name,
+                    Participants = e.Participants.Select(p => new UserDto
+                    {
+                        Id = p.Id,
+                        FirstName = p.FirstName,
+                        LastName = p.LastName,
+                        Email = p.Email
+                    }).ToList()
+                })
+                .ToListAsync();
+        }
+
         public async Task<IEnumerable<EventDto>> GetUserEventsAsync(string userId)
         {
             return await _context.Events
@@ -248,14 +283,32 @@ namespace HITS.Services
 
         public async Task<bool> DeleteEventAsync(Guid eventId)
         {
-            var eventObj = await _context.Events.FindAsync(eventId);
+            var eventObj = await _context.Events
+                .Include(e => e.Participants)
+                .FirstOrDefaultAsync(e => e.Id == eventId);
+
             if (eventObj == null)
                 return false;
+
+            // Удаляем событие из календарей всех участников
+            foreach (var participant in eventObj.Participants)
+            {
+                try
+                {
+                    // TODO: Нужно хранить GoogleCalendarEventId для каждого участника
+                    // await _googleCalendarService.RemoveEventFromCalendarAsync(participant.Id, googleCalendarEventId);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Failed to remove event from calendar for user {participant.Id}: {ex.Message}");
+                }
+            }
 
             _context.Events.Remove(eventObj);
             await _context.SaveChangesAsync();
             return true;
         }
+
         public async Task<bool> UpdateEventAsync(Guid eventId, UpdateEventDto updateEventDto, string managerId)
         {
             var eventObj = await _context.Events
@@ -284,6 +337,7 @@ namespace HITS.Services
             await _context.SaveChangesAsync();
             return true;
         }
+
         public async Task<bool> UnregisterFromEventAsync(Guid eventId, string studentId)
         {
             var eventObj = await _context.Events
@@ -293,16 +347,22 @@ namespace HITS.Services
             if (eventObj == null) return false;
 
             var student = eventObj.Participants.FirstOrDefault(p => p.Id == studentId);
-            if (student == null) return false; 
+            if (student == null) return false;
 
             eventObj.Participants.Remove(student);
             await _context.SaveChangesAsync();
 
-            // TODO: Здесь позже добавим удаление из Google Calendar
-            // await _googleCalendarService.RemoveEventFromCalendarAsync(studentId, calendarEventId);
+            try
+            {
+                // TODO: Нужно хранить GoogleCalendarEventId для каждого участника
+                // await _googleCalendarService.RemoveEventFromCalendarAsync(studentId, googleCalendarEventId);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Failed to remove event from Google Calendar: {ex.Message}");
+            }
 
             return true;
         }
-
     }
 }

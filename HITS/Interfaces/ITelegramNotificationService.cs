@@ -9,5 +9,6 @@ namespace HITS.Interfaces
         Task NotifyUserApprovedAsync(string userId, string message);
         Task NotifyEventRegistrationAsync(User user, Event eventObj);
         Task NotifyEventCreatedAsync(Event eventObj);
+        Task NotifyUserRejectedAsync(string userId, string message);
     }
 }

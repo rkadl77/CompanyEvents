@@ -148,7 +148,9 @@ namespace HITS.Controllers
             }
             catch (UnauthorizedAccessException ex)
             {
-                return Forbid(ex.Message);
+
+                return Forbid();
+                               
             }
             catch (Exception ex)
             {

@@ -129,5 +129,22 @@ namespace HITS.Services
                 _logger.LogError(ex, "Error sending event creation notification");
             }
         }
+        public async Task NotifyUserRejectedAsync(string userId, string message)
+        {
+            try
+            {
+                var user = await _context.Users.FindAsync(userId);
+                if (user == null || user.TelegramChatId == null)
+                    return;
+
+                await _botClient.SendTextMessageAsync(
+                    chatId: user.TelegramChatId,
+                    text: message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error sending rejection notification to user {UserId}", userId);
+            }
+        }
     }
 }

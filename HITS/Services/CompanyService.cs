@@ -20,7 +20,6 @@ namespace HITS.Services
 
             try
             {
-                // ПРОВЕРКА: У менеджера не должно быть компании
                 var manager = await _context.Users.FindAsync(managerId);
                 if (manager == null)
                     throw new Exception("Manager not found");
@@ -98,7 +97,11 @@ namespace HITS.Services
             try
             {
                 var currentManager = await _context.Users.FindAsync(currentManagerId);
-                if (currentManager == null || currentManager.CompanyId != companyId || !currentManager.IsApproved)
+
+                if (currentManager == null || !currentManager.IsApproved)
+                    throw new UnauthorizedAccessException("User not authorized");
+
+                if (currentManager.Role != "Deanery" && currentManager.CompanyId != companyId)
                     throw new UnauthorizedAccessException("You don't have permission to add managers to this company");
 
                 var newManager = await _context.Users.FindAsync(managerId);

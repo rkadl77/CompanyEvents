@@ -18,5 +18,7 @@ namespace HITS.Models.Entities
         public string? TelegramChatId { get; set; }
 
         public virtual ICollection<Event> ParticipatedEvents { get; set; } = new List<Event>();
+
+        public string? RejectionReason { get; set; }
     }
 }

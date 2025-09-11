@@ -969,7 +969,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/User"
+                    "$ref": "#/components/schemas/UserDto"
                   }
                 }
               },
@@ -977,7 +977,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/User"
+                    "$ref": "#/components/schemas/UserDto"
                   }
                 }
               },
@@ -985,7 +985,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/User"
+                    "$ref": "#/components/schemas/UserDto"
                   }
                 }
               }
@@ -1083,6 +1083,52 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "Bearer": [ ]
+          }
+        ]
+      }
+    },
+    "/api/Users/{id}/reject": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RejectUserDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RejectUserDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/RejectUserDto"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "OK"
@@ -1367,6 +1413,19 @@
         },
         "additionalProperties": false
       },
+      "RejectUserDto": {
+        "required": [
+          "reason"
+        ],
+        "type": "object",
+        "properties": {
+          "reason": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
       "UpdateEventDto": {
         "type": "object",
         "properties": {
@@ -1493,6 +1552,10 @@
               "$ref": "#/components/schemas/Event"
             },
             "nullable": true
+          },
+          "rejectionReason": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -1522,6 +1585,10 @@
           },
           "isApproved": {
             "type": "boolean"
+          },
+          "rejectionReason": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false

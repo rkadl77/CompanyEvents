@@ -1,8 +1,9 @@
 ﻿using HITS.Interfaces;
+using HITS.Models.DTOs;
 using HITS.Models.Entities;
+using HITS.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using HITS.Services;
 
 namespace HITS.Controllers
 {
@@ -21,10 +22,18 @@ namespace HITS.Controllers
         }
 
         [HttpGet("pending")]
-        public async Task<ActionResult<IEnumerable<User>>> GetPendingUsers()
+        [Authorize(Roles = "Deanery")]
+        public async Task<ActionResult<IEnumerable<UserDto>>> GetPendingUsers() 
         {
-            var users = await _userService.GetPendingUsersAsync();
-            return Ok(users);
+            try
+            {
+                var users = await _userService.GetPendingUsersAsync();
+                return Ok(users);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
         [HttpGet("{id}")]
@@ -69,6 +78,41 @@ namespace HITS.Controllers
             }
 
             return NoContent();
+        }
+
+        [HttpPost("{id}/reject")]
+        [Authorize(Roles = "Deanery")]
+        public async Task<IActionResult> RejectUser(string id, [FromBody] RejectUserDto rejectDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                var result = await _userService.RejectUserAsync(id, rejectDto.Reason);
+
+                if (!result)
+                {
+                    return NotFound(new { message = "User not found" });
+                }
+
+                try
+                {
+                    await _telegramNotificationService.NotifyUserRejectedAsync(id,
+                        $"❌ Ваша заявка отклонена. Причина: {rejectDto.Reason}");
+                }
+                catch
+                {
+                }
+
+                return Ok(new { message = "User rejected successfully" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
     }
 }

@@ -48,9 +48,6 @@ namespace HITS.TelegramBot.Services
                 if (response.IsSuccessStatusCode)
                     return "Регистрация успешна! Ожидайте подтверждения администратором.";
 
-                if (content.Contains("DuplicateUserName") || content.Contains("DuplicateEmail"))
-                    return $"Пользователь с email {email} уже существует. Используйте /login для входа.";
-
                 return $"Ошибка регистрации: {content}";
             }
             catch (Exception ex)
@@ -87,167 +84,172 @@ namespace HITS.TelegramBot.Services
         public async Task<UserDto> GetCurrentUserAsync()
         {
             EnsureAuthenticated();
-
-            try
-            {
-                var response = await _httpClient.GetAsync($"{_baseUrl}/api/Auth/current-user");
-                response.EnsureSuccessStatusCode();
-
-                return await response.Content.ReadFromJsonAsync<UserDto>()!;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Ошибка получения данных пользователя: {ex.Message}");
-            }
+            var response = await _httpClient.GetAsync($"{_baseUrl}/api/Auth/current-user");
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadFromJsonAsync<UserDto>();
         }
 
         public async Task<List<EventDto>> GetEventsAsync(bool upcomingOnly = true)
         {
             EnsureAuthenticated();
-
-            try
-            {
-                var response = await _httpClient.GetAsync($"{_baseUrl}/api/Events?upcomingOnly={upcomingOnly}");
-                response.EnsureSuccessStatusCode();
-
-                return await response.Content.ReadFromJsonAsync<List<EventDto>>() ?? new List<EventDto>();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Ошибка получения событий: {ex.Message}");
-            }
+            var response = await _httpClient.GetAsync($"{_baseUrl}/api/Events?upcomingOnly={upcomingOnly}");
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadFromJsonAsync<List<EventDto>>() ?? new List<EventDto>();
         }
 
         public async Task<List<EventDto>> GetUserEventsAsync()
         {
             EnsureAuthenticated();
+            var response = await _httpClient.GetAsync($"{_baseUrl}/api/Events/my-events");
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadFromJsonAsync<List<EventDto>>() ?? new List<EventDto>();
+        }
 
-            try
-            {
-                var response = await _httpClient.GetAsync($"{_baseUrl}/api/Events/my-events");
-                response.EnsureSuccessStatusCode();
-
-                return await response.Content.ReadFromJsonAsync<List<EventDto>>() ?? new List<EventDto>();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Ошибка получения моих событий: {ex.Message}");
-            }
+        public async Task<EventDto> GetEventAsync(Guid eventId)
+        {
+            EnsureAuthenticated();
+            var response = await _httpClient.GetAsync($"{_baseUrl}/api/Events/{eventId}");
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadFromJsonAsync<EventDto>();
         }
 
         public async Task<EventDto> CreateEventAsync(CreateEventDto eventDto)
         {
             EnsureAuthenticated();
+            var response = await _httpClient.PostAsJsonAsync($"{_baseUrl}/api/Events", eventDto);
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadFromJsonAsync<EventDto>();
+        }
 
-            try
-            {
-                var response = await _httpClient.PostAsJsonAsync($"{_baseUrl}/api/Events", eventDto);
-                response.EnsureSuccessStatusCode();
+        public async Task<bool> UpdateEventAsync(Guid eventId, UpdateEventDto eventDto)
+        {
+            EnsureAuthenticated();
+            var response = await _httpClient.PutAsJsonAsync($"{_baseUrl}/api/Events/{eventId}", eventDto);
+            return response.IsSuccessStatusCode;
+        }
 
-                return await response.Content.ReadFromJsonAsync<EventDto>()!;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Ошибка создания события: {ex.Message}");
-            }
+        public async Task<bool> DeleteEventAsync(Guid eventId)
+        {
+            EnsureAuthenticated();
+            var response = await _httpClient.DeleteAsync($"{_baseUrl}/api/Events/{eventId}");
+            return response.IsSuccessStatusCode;
         }
 
         public async Task<bool> RegisterForEventAsync(Guid eventId)
         {
             EnsureAuthenticated();
+            var response = await _httpClient.PostAsync($"{_baseUrl}/api/Events/{eventId}/register", null);
+            return response.IsSuccessStatusCode;
+        }
 
-            try
-            {
-                var response = await _httpClient.PostAsync($"{_baseUrl}/api/Events/{eventId}/register", null);
-                return response.IsSuccessStatusCode;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Ошибка регистрации на событие: {ex.Message}");
-            }
+        public async Task<bool> UnregisterFromEventAsync(Guid eventId)
+        {
+            EnsureAuthenticated();
+            var response = await _httpClient.DeleteAsync($"{_baseUrl}/api/Events/{eventId}/register");
+            return response.IsSuccessStatusCode;
         }
 
         public async Task<List<UserDto>> GetEventParticipantsAsync(Guid eventId)
         {
             EnsureAuthenticated();
+            var response = await _httpClient.GetAsync($"{_baseUrl}/api/Events/{eventId}/participants");
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadFromJsonAsync<List<UserDto>>() ?? new List<UserDto>();
+        }
 
-            try
-            {
-                var response = await _httpClient.GetAsync($"{_baseUrl}/api/Events/{eventId}/participants");
-                response.EnsureSuccessStatusCode();
-
-                return await response.Content.ReadFromJsonAsync<List<UserDto>>() ?? new List<UserDto>();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Ошибка получения участников: {ex.Message}");
-            }
+        public async Task<bool> SetEventDeadlineAsync(Guid eventId, DateTime deadline)
+        {
+            EnsureAuthenticated();
+            var updateDto = new UpdateEventDto { RegistrationDeadline = deadline };
+            var response = await _httpClient.PutAsJsonAsync($"{_baseUrl}/api/Events/{eventId}", updateDto);
+            return response.IsSuccessStatusCode;
         }
 
         public async Task<List<UserDto>> GetPendingUsersAsync()
         {
             EnsureAuthenticated();
-
-            try
-            {
-                var response = await _httpClient.GetAsync($"{_baseUrl}/api/Users/pending");
-                response.EnsureSuccessStatusCode();
-
-                return await response.Content.ReadFromJsonAsync<List<UserDto>>() ?? new List<UserDto>();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Ошибка получения ожидающих пользователей: {ex.Message}");
-            }
+            var response = await _httpClient.GetAsync($"{_baseUrl}/api/Users/pending");
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadFromJsonAsync<List<UserDto>>() ?? new List<UserDto>();
         }
 
         public async Task<bool> ApproveUserAsync(string userId)
         {
             EnsureAuthenticated();
-
-            try
-            {
-                var response = await _httpClient.PostAsync($"{_baseUrl}/api/Users/{userId}/approve", null);
-                return response.IsSuccessStatusCode;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Ошибка подтверждения пользователя: {ex.Message}");
-            }
+            var response = await _httpClient.PostAsync($"{_baseUrl}/api/Users/{userId}/approve", null);
+            return response.IsSuccessStatusCode;
         }
 
         public async Task<CompanyDto> GetMyCompanyAsync()
         {
             EnsureAuthenticated();
+            var response = await _httpClient.GetAsync($"{_baseUrl}/api/Companies/my-company");
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadFromJsonAsync<CompanyDto>();
+        }
 
-            try
-            {
-                var response = await _httpClient.GetAsync($"{_baseUrl}/api/Companies/my-company");
-                response.EnsureSuccessStatusCode();
-
-                return await response.Content.ReadFromJsonAsync<CompanyDto>()!;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Ошибка получения компании: {ex.Message}");
-            }
+        public async Task<List<CompanyDto>> GetAllCompaniesAsync()
+        {
+            EnsureAuthenticated();
+            var response = await _httpClient.GetAsync($"{_baseUrl}/api/Companies");
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadFromJsonAsync<List<CompanyDto>>() ?? new List<CompanyDto>();
         }
 
         public async Task<CompanyDto> CreateCompanyAsync(CreateCompanyDto companyDto)
         {
             EnsureAuthenticated();
+            var response = await _httpClient.PostAsJsonAsync($"{_baseUrl}/api/Companies", companyDto);
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadFromJsonAsync<CompanyDto>();
+        }
 
-            try
-            {
-                var response = await _httpClient.PostAsJsonAsync($"{_baseUrl}/api/Companies", companyDto);
-                response.EnsureSuccessStatusCode();
+        public async Task<bool> AddManagerToCompanyAsync(Guid companyId, string managerId)
+        {
+            EnsureAuthenticated();
+            var response = await _httpClient.PostAsync($"{_baseUrl}/api/Companies/{companyId}/managers/{managerId}", null);
+            return response.IsSuccessStatusCode;
+        }
 
-                return await response.Content.ReadFromJsonAsync<CompanyDto>()!;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Ошибка создания компании: {ex.Message}");
-            }
+        public async Task<List<UserDto>> GetCompanyManagersAsync(Guid companyId)
+        {
+            EnsureAuthenticated();
+            var response = await _httpClient.GetAsync($"{_baseUrl}/api/Companies/{companyId}/managers");
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadFromJsonAsync<List<UserDto>>() ?? new List<UserDto>();
+        }
+
+        public async Task<bool> RemoveManagerFromCompanyAsync(Guid companyId, string managerId)
+        {
+            EnsureAuthenticated();
+            var response = await _httpClient.DeleteAsync($"{_baseUrl}/api/Companies/{companyId}/managers/{managerId}");
+            return response.IsSuccessStatusCode;
+        }
+
+        public async Task<string> GetGoogleAuthUrlAsync()
+        {
+            EnsureAuthenticated();
+            var response = await _httpClient.GetAsync($"{_baseUrl}/api/GoogleAuth/auth-url");
+            response.EnsureSuccessStatusCode();
+
+            return await response.Content.ReadAsStringAsync();
+        }
+
+        public async Task<bool> CheckGoogleCalendarAccessAsync()
+        {
+            EnsureAuthenticated();
+            var response = await _httpClient.GetAsync($"{_baseUrl}/api/GoogleAuth/status");
+            response.EnsureSuccessStatusCode();
+
+            var content = await response.Content.ReadAsStringAsync();
+            return content.Contains("\"hasAccess\":true") || content.Contains("true");
+        }
+
+        public async Task<bool> TestAddEventToCalendarAsync()
+        {
+            EnsureAuthenticated();
+            var response = await _httpClient.GetAsync($"{_baseUrl}/api/GoogleAuth/test-add-event");
+            return response.IsSuccessStatusCode;
         }
 
         private void EnsureAuthenticated()
@@ -260,6 +262,35 @@ namespace HITS.TelegramBot.Services
         {
             _jwtToken = null;
             _httpClient.DefaultRequestHeaders.Authorization = null;
+        }
+        public async Task<List<EventDto>> GetManagerEventsAsync()
+        {
+            EnsureAuthenticated();
+            try
+            {
+                var response = await _httpClient.GetAsync($"{_baseUrl}/api/Events/manager-events");
+                response.EnsureSuccessStatusCode();
+                return await response.Content.ReadFromJsonAsync<List<EventDto>>() ?? new List<EventDto>();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Ошибка получения мероприятий компании: {ex.Message}");
+            }
+        }
+
+        public async Task<bool> RejectUserAsync(string userId, string reason)
+        {
+            EnsureAuthenticated();
+            try
+            {
+                var rejectDto = new { Reason = reason };
+                var response = await _httpClient.PostAsJsonAsync($"{_baseUrl}/api/Users/{userId}/reject", rejectDto);
+                return response.IsSuccessStatusCode;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Ошибка отклонения пользователя: {ex.Message}");
+            }
         }
     }
 }
