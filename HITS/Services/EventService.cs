@@ -1,5 +1,6 @@
 ﻿using HITS.Data;
 using HITS.Interfaces;
+using HITS.Models.DTOs;
 using HITS.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -37,15 +38,34 @@ namespace HITS.Services
             return newEvent;
         }
 
-        public async Task<Event> GetEventByIdAsync(Guid id)
+        public async Task<EventDto?> GetEventByIdAsync(Guid id)
         {
             return await _context.Events
                 .Include(e => e.Company)
                 .Include(e => e.Participants)
-                .FirstOrDefaultAsync(e => e.Id == id);
+                .Where(e => e.Id == id)
+                .Select(e => new EventDto
+                {
+                    Id = e.Id,
+                    Title = e.Title,
+                    Description = e.Description,
+                    Date = e.Date,
+                    Location = e.Location,
+                    RegistrationDeadline = e.RegistrationDeadline,
+                    CompanyId = e.CompanyId,
+                    CompanyName = e.Company.Name,
+                    Participants = e.Participants.Select(p => new UserDto
+                    {
+                        Id = p.Id,
+                        FirstName = p.FirstName,
+                        LastName = p.LastName,
+                        Email = p.Email
+                    }).ToList()
+                })
+                .FirstOrDefaultAsync();
         }
 
-        public async Task<IEnumerable<Event>> GetAllEventsAsync(bool upcomingOnly = true)
+        public async Task<IEnumerable<EventDto>> GetAllEventsAsync(bool upcomingOnly = true)
         {
             var query = _context.Events
                 .Include(e => e.Company)
@@ -57,10 +77,30 @@ namespace HITS.Services
                 query = query.Where(e => e.Date > DateTime.Now);
             }
 
-            return await query.OrderBy(e => e.Date).ToListAsync();
+            return await query
+                .OrderBy(e => e.Date)
+                .Select(e => new EventDto
+                {
+                    Id = e.Id,
+                    Title = e.Title,
+                    Description = e.Description,
+                    Date = e.Date,
+                    Location = e.Location,
+                    RegistrationDeadline = e.RegistrationDeadline,
+                    CompanyId = e.CompanyId,
+                    CompanyName = e.Company.Name,
+                    Participants = e.Participants.Select(p => new UserDto
+                    {
+                        Id = p.Id,
+                        FirstName = p.FirstName,
+                        LastName = p.LastName,
+                        Email = p.Email
+                    }).ToList()
+                })
+                .ToListAsync();
         }
 
-        public async Task<IEnumerable<Event>> GetCompanyEventsAsync(Guid companyId, bool upcomingOnly = true)
+        public async Task<IEnumerable<EventDto>> GetCompanyEventsAsync(Guid companyId, bool upcomingOnly = true)
         {
             var query = _context.Events
                 .Include(e => e.Company)
@@ -73,20 +113,60 @@ namespace HITS.Services
                 query = query.Where(e => e.Date > DateTime.Now);
             }
 
-            return await query.OrderBy(e => e.Date).ToListAsync();
+            return await query
+                .OrderBy(e => e.Date)
+                .Select(e => new EventDto
+                {
+                    Id = e.Id,
+                    Title = e.Title,
+                    Description = e.Description,
+                    Date = e.Date,
+                    Location = e.Location,
+                    RegistrationDeadline = e.RegistrationDeadline,
+                    CompanyId = e.CompanyId,
+                    CompanyName = e.Company.Name,
+                    Participants = e.Participants.Select(p => new UserDto
+                    {
+                        Id = p.Id,
+                        FirstName = p.FirstName,
+                        LastName = p.LastName,
+                        Email = p.Email
+                    }).ToList()
+                })
+                .ToListAsync();
         }
 
-        public async Task<IEnumerable<Event>> GetUserEventsAsync(string userId)
+        public async Task<IEnumerable<EventDto>> GetUserEventsAsync(string userId)
         {
             return await _context.Events
                 .Include(e => e.Company)
                 .Include(e => e.Participants)
                 .Where(e => e.Participants.Any(p => p.Id == userId))
                 .OrderBy(e => e.Date)
+                .Select(e => new EventDto
+                {
+                    Id = e.Id,
+                    Title = e.Title,
+                    Description = e.Description,
+                    Date = e.Date,
+                    Location = e.Location,
+                    RegistrationDeadline = e.RegistrationDeadline,
+                    CompanyId = e.CompanyId,
+                    CompanyName = e.Company.Name,
+                    Participants = e.Participants.Select(p => new UserDto
+                    {
+                        Id = p.Id,
+                        FirstName = p.FirstName,
+                        LastName = p.LastName,
+                        Email = p.Email,
+                        Role = p.Role,
+                        IsApproved = p.IsApproved
+                    }).ToList()
+                })
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<User>> GetEventParticipantsAsync(Guid eventId, string managerId)
+        public async Task<IEnumerable<UserDto>> GetEventParticipantsAsync(Guid eventId, string managerId)
         {
             var eventObj = await _context.Events
                 .Include(e => e.Participants)
@@ -101,7 +181,18 @@ namespace HITS.Services
             if (!isManagerAuthorized)
                 throw new UnauthorizedAccessException("Manager not authorized to view this event's participants");
 
-            return eventObj.Participants.Where(p => p.IsApproved);
+            return eventObj.Participants
+                .Where(p => p.IsApproved)
+                .Select(p => new UserDto
+                {
+                    Id = p.Id,
+                    FirstName = p.FirstName,
+                    LastName = p.LastName,
+                    Email = p.Email,
+                    Role = p.Role,
+                    IsApproved = p.IsApproved
+                })
+                .ToList();
         }
 
         public async Task<bool> RegisterForEventAsync(Guid eventId, string studentId)
@@ -133,7 +224,6 @@ namespace HITS.Services
             try
             {
                 var hasCalendarAccess = await _googleCalendarService.HasCalendarAccessAsync(studentId);
-
                 if (hasCalendarAccess)
                 {
                     await _googleCalendarService.AddEventToCalendarAsync(studentId, eventObj);

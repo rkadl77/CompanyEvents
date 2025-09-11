@@ -9,6 +9,7 @@ var builder = Host.CreateDefaultBuilder(args)
         services.AddHostedService<TelegramBotService>();
         services.AddSingleton<ApiClientService>();
         services.AddSingleton<SimpleMappingService>();
+        services.AddSingleton<UserStateService>();
         services.AddHttpClient();
     })
     .ConfigureLogging(logging =>

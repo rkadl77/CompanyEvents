@@ -114,7 +114,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Company"
+                    "$ref": "#/components/schemas/CompanyDto"
                   }
                 }
               },
@@ -122,7 +122,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Company"
+                    "$ref": "#/components/schemas/CompanyDto"
                   }
                 }
               },
@@ -130,7 +130,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Company"
+                    "$ref": "#/components/schemas/CompanyDto"
                   }
                 }
               }
@@ -167,17 +167,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/Company"
+                  "$ref": "#/components/schemas/CompanyDto"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Company"
+                  "$ref": "#/components/schemas/CompanyDto"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Company"
+                  "$ref": "#/components/schemas/CompanyDto"
                 }
               }
             }
@@ -212,17 +212,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/Company"
+                  "$ref": "#/components/schemas/CompanyDto"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Company"
+                  "$ref": "#/components/schemas/CompanyDto"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Company"
+                  "$ref": "#/components/schemas/CompanyDto"
                 }
               }
             }
@@ -334,17 +334,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/Company"
+                  "$ref": "#/components/schemas/CompanyDto"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Company"
+                  "$ref": "#/components/schemas/CompanyDto"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Company"
+                  "$ref": "#/components/schemas/CompanyDto"
                 }
               }
             }
@@ -388,7 +388,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Event"
+                    "$ref": "#/components/schemas/EventDto"
                   }
                 }
               },
@@ -396,7 +396,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Event"
+                    "$ref": "#/components/schemas/EventDto"
                   }
                 }
               },
@@ -404,7 +404,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Event"
+                    "$ref": "#/components/schemas/EventDto"
                   }
                 }
               }
@@ -441,17 +441,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/Event"
+                  "$ref": "#/components/schemas/EventDto"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Event"
+                  "$ref": "#/components/schemas/EventDto"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Event"
+                  "$ref": "#/components/schemas/EventDto"
                 }
               }
             }
@@ -477,7 +477,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Event"
+                    "$ref": "#/components/schemas/EventDto"
                   }
                 }
               },
@@ -485,7 +485,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Event"
+                    "$ref": "#/components/schemas/EventDto"
                   }
                 }
               },
@@ -493,7 +493,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Event"
+                    "$ref": "#/components/schemas/EventDto"
                   }
                 }
               }
@@ -529,17 +529,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/Event"
+                  "$ref": "#/components/schemas/EventDto"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Event"
+                  "$ref": "#/components/schemas/EventDto"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Event"
+                  "$ref": "#/components/schemas/EventDto"
                 }
               }
             }
@@ -597,7 +597,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/User"
+                    "$ref": "#/components/schemas/UserDto"
                   }
                 }
               },
@@ -605,7 +605,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/User"
+                    "$ref": "#/components/schemas/UserDto"
                   }
                 }
               },
@@ -613,7 +613,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/User"
+                    "$ref": "#/components/schemas/UserDto"
                   }
                 }
               }
@@ -971,6 +971,24 @@
         },
         "additionalProperties": false
       },
+      "CompanyDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "CreateCompanyDto": {
         "required": [
           "description",
@@ -1067,6 +1085,52 @@
           },
           "googleCalendarEventId": {
             "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "EventDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "location": {
+            "type": "string",
+            "nullable": true
+          },
+          "registrationDeadline": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "companyId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "companyName": {
+            "type": "string",
+            "nullable": true
+          },
+          "participants": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UserDto"
+            },
             "nullable": true
           }
         },

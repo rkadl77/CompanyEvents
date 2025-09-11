@@ -21,13 +21,13 @@ namespace HITS.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<ActionResult<IEnumerable<Event>>> GetEvents(
+        public async Task<ActionResult<IEnumerable<EventDto>>> GetEvents(
             [FromQuery] bool upcomingOnly = true,
             [FromQuery] Guid? companyId = null)
         {
             try
             {
-                IEnumerable<Event> events;
+                IEnumerable<EventDto> events;
 
                 if (companyId.HasValue)
                 {
@@ -48,7 +48,7 @@ namespace HITS.Controllers
 
         [HttpGet("my-events")]
         [Authorize]
-        public async Task<ActionResult<IEnumerable<Event>>> GetUserEvents()
+        public async Task<ActionResult<IEnumerable<EventDto>>> GetUserEvents()
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
@@ -70,7 +70,7 @@ namespace HITS.Controllers
 
         [HttpGet("{id}")]
         [AllowAnonymous]
-        public async Task<ActionResult<Event>> GetEvent(Guid id)
+        public async Task<ActionResult<EventDto>> GetEvent(Guid id)
         {
             var eventObj = await _eventService.GetEventByIdAsync(id);
             if (eventObj == null)
@@ -82,7 +82,7 @@ namespace HITS.Controllers
 
         [HttpGet("{id}/participants")]
         [Authorize(Roles = "CompanyManager,Deanery")]
-        public async Task<ActionResult<IEnumerable<User>>> GetEventParticipants(Guid id)
+        public async Task<ActionResult<IEnumerable<UserDto>>> GetEventParticipants(Guid id)
         {
             var managerId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
@@ -126,7 +126,7 @@ namespace HITS.Controllers
 
         [HttpPost]
         [Authorize(Roles = "CompanyManager,Deanery")]
-        public async Task<ActionResult<Event>> CreateEvent(CreateEventDto createEventDto)
+        public async Task<ActionResult<EventDto>> CreateEvent(CreateEventDto createEventDto)
         {
             if (createEventDto.RegistrationDeadline.HasValue &&
                 createEventDto.RegistrationDeadline < DateTime.Now)
@@ -158,7 +158,20 @@ namespace HITS.Controllers
             try
             {
                 var createdEvent = await _eventService.CreateEventAsync(newEvent, managerId);
-                return CreatedAtAction(nameof(GetEvent), new { id = createdEvent.Id }, createdEvent);
+
+                var eventDto = new EventDto
+                {
+                    Id = createdEvent.Id,
+                    Title = createdEvent.Title,
+                    Description = createdEvent.Description,
+                    Date = createdEvent.Date,
+                    Location = createdEvent.Location,
+                    RegistrationDeadline = createdEvent.RegistrationDeadline,
+                    CompanyId = createdEvent.Company.Id,
+                    CompanyName = createdEvent.Company.Name
+                };
+
+                return CreatedAtAction(nameof(GetEvent), new { id = eventDto.Id }, eventDto);
             }
             catch (Exception ex)
             {

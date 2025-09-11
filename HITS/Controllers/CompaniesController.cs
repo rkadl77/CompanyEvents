@@ -20,12 +20,18 @@ namespace HITS.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<ActionResult<IEnumerable<Company>>> GetCompanies()
+        public async Task<ActionResult<IEnumerable<CompanyDto>>> GetCompanies()
         {
             try
             {
                 var companies = await _companyService.GetAllCompaniesAsync();
-                return Ok(companies);
+                var dtos = companies.Select(c => new CompanyDto
+                {
+                    Id = c.Id,
+                    Name = c.Name,
+                    Description = c.Description
+                });
+                return Ok(dtos);
             }
             catch (Exception ex)
             {
@@ -35,7 +41,7 @@ namespace HITS.Controllers
 
         [HttpGet("{id}")]
         [AllowAnonymous]
-        public async Task<ActionResult<Company>> GetCompany(Guid id)
+        public async Task<ActionResult<CompanyDto>> GetCompany(Guid id)
         {
             try
             {
@@ -44,7 +50,15 @@ namespace HITS.Controllers
                 {
                     return NotFound(new { message = "Company not found" });
                 }
-                return Ok(company);
+
+                var dto = new CompanyDto
+                {
+                    Id = company.Id,
+                    Name = company.Name,
+                    Description = company.Description
+                };
+
+                return Ok(dto);
             }
             catch (Exception ex)
             {
@@ -71,7 +85,7 @@ namespace HITS.Controllers
 
         [HttpPost]
         [Authorize(Roles = "CompanyManager,Deanery")]
-        public async Task<ActionResult<Company>> CreateCompany(CreateCompanyDto createCompanyDto)
+        public async Task<ActionResult<CompanyDto>> CreateCompany(CreateCompanyDto createCompanyDto)
         {
             if (!ModelState.IsValid)
             {
@@ -94,7 +108,15 @@ namespace HITS.Controllers
                 };
 
                 var createdCompany = await _companyService.CreateCompanyAsync(company, managerId);
-                return CreatedAtAction(nameof(GetCompany), new { id = createdCompany.Id }, createdCompany);
+
+                var dto = new CompanyDto
+                {
+                    Id = createdCompany.Id,
+                    Name = createdCompany.Name,
+                    Description = createdCompany.Description
+                };
+
+                return CreatedAtAction(nameof(GetCompany), new { id = dto.Id }, dto);
             }
             catch (Exception ex)
             {
@@ -136,7 +158,7 @@ namespace HITS.Controllers
 
         [HttpGet("my-company")]
         [Authorize(Roles = "CompanyManager")]
-        public async Task<ActionResult<Company>> GetMyCompany()
+        public async Task<ActionResult<CompanyDto>> GetMyCompany()
         {
             var managerId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
@@ -152,7 +174,15 @@ namespace HITS.Controllers
                 {
                     return NotFound(new { message = "You are not associated with any company" });
                 }
-                return Ok(company);
+
+                var dto = new CompanyDto
+                {
+                    Id = company.Id,
+                    Name = company.Name,
+                    Description = company.Description
+                };
+
+                return Ok(dto);
             }
             catch (Exception ex)
             {

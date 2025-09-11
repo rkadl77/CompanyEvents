@@ -28,5 +28,5 @@
 		<PackageReference Include="Google.Apis.Calendar.v3" Version="1.68.0.3346" />
 		<PackageReference Include="Google.Apis.Auth" Version="1.68.0.3346" />
 	</ItemGroup>
-
+	
 </Project>
