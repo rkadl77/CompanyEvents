@@ -128,20 +128,17 @@ namespace HITS.Controllers
         [Authorize(Roles = "CompanyManager,Deanery")]
         public async Task<ActionResult<EventDto>> CreateEvent(CreateEventDto createEventDto)
         {
-            // 1. Проверка: дата события не может быть в прошлом
             if (createEventDto.Date < DateTime.Now)
             {
                 return BadRequest(new { message = "Event date cannot be in the past" });
             }
 
-            // 2. Проверка: если указан дедлайн, он не может быть в прошлом
             if (createEventDto.RegistrationDeadline.HasValue &&
                 createEventDto.RegistrationDeadline < DateTime.Now)
             {
                 return BadRequest(new { message = "Registration deadline cannot be in the past" });
             }
 
-            // 3. НОВАЯ ПРОВЕРКА: если указан дедлайн, он должен быть РАНЬШЕ даты события
             if (createEventDto.RegistrationDeadline.HasValue &&
                 createEventDto.RegistrationDeadline >= createEventDto.Date)
             {

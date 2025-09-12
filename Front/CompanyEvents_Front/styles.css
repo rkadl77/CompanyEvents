@@ -1,0 +1,67 @@
+.loader {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #3273dc;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin: 20px auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.event-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.event-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.hero {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.card-footer-item {
+    cursor: pointer;
+}
+
+@media screen and (max-width: 768px) {
+    .navbar-menu {
+        background-color: white;
+        padding: 10px;
+    }
+    
+    .card {
+        margin-bottom: 1rem;
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.button.is-primary {
+    background-color: #3273dc;
+}
+
+.button.is-primary:hover {
+    background-color: #2765c8;
+}
+
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    max-width: 350px;
+}

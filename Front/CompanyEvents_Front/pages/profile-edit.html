@@ -1,0 +1,58 @@
+<div class="fade-in">
+    <div class="columns is-centered">
+        <div class="column is-half">
+            <div class="card">
+                <header class="card-header">
+                    <p class="card-header-title">
+                        <i class="fas fa-user-edit mr-2"></i>Редактирование профиля
+                    </p>
+                </header>
+                <div class="card-content">
+                    <form id="profile-edit-form">
+                        <div class="field">
+                            <label class="label">Имя</label>
+                            <div class="control">
+                                <input class="input" type="text" id="edit-firstName" required>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label class="label">Фамилия</label>
+                            <div class="control">
+                                <input class="input" type="text" id="edit-lastName" required>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label class="label">Email</label>
+                            <div class="control">
+                                <input class="input" type="email" id="edit-email" required>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label class="label">Новый пароль (оставьте пустым, если не хотите менять)</label>
+                            <div class="control">
+                                <input class="input" type="password" id="edit-password" placeholder="Новый пароль">
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <div class="control">
+                                <button type="submit" class="button is-primary is-fullwidth">
+                                    <i class="fas fa-save mr-2"></i>Сохранить изменения
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <div class="has-text-centered mt-4">
+                        <a href="#/profile" class="button is-light">
+                            <i class="fas fa-arrow-left mr-2"></i>Назад в профиль
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,74 @@
+<div class="fade-in">
+    <div class="columns is-centered">
+        <div class="column is-half">
+            <div class="card">
+                <header class="card-header">
+                    <p class="card-header-title">
+                        <i class="fas fa-user-plus mr-2"></i>Регистрация
+                    </p>
+                </header>
+                <div class="card-content">
+                    <form id="register-form">
+                        <div class="field">
+                            <label class="label">Имя</label>
+                            <div class="control">
+                                <input class="input" type="text" id="firstName" placeholder="Ваше имя" required>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label class="label">Фамилия</label>
+                            <div class="control">
+                                <input class="input" type="text" id="lastName" placeholder="Ваша фамилия" required>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label class="label">Email</label>
+                            <div class="control has-icons-left">
+                                <input class="input" type="email" id="email" placeholder="Ваш email" required>
+                                <span class="icon is-small is-left">
+                                    <i class="fas fa-envelope"></i>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label class="label">Пароль</label>
+                            <div class="control has-icons-left">
+                                <input class="input" type="password" id="password" placeholder="Придумайте пароль" required>
+                                <span class="icon is-small is-left">
+                                    <i class="fas fa-lock"></i>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label class="label">Роль</label>
+                            <div class="control">
+                                <div class="select is-fullwidth">
+                                    <select id="role" required>
+                                        <option value="">Выберите роль</option>
+                                        <option value="Student">Студент</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <div class="control">
+                                <button type="submit" class="button is-primary is-fullwidth">
+                                    <i class="fas fa-user-plus mr-2"></i>Зарегистрироваться
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <div class="has-text-centered mt-4">
+                        <p>Уже есть аккаунт? <a href="#/login">Войти</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -25,7 +25,6 @@ namespace HITS.Services
         }
         public async Task<string> GetAuthUrlAsync(string userId, string redirectUri)
         {
-            // Ваши реальные credentials из appsettings.json
             var clientId = "726099358359-po8mspe2jsl4n3khcl69mgh49bmkkb6j.apps.googleusercontent.com";
 
             var authUrl = "https://accounts.google.com/o/oauth2/v2/auth?" +

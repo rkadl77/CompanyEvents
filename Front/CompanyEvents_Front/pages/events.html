@@ -1,0 +1,39 @@
+<div class="fade-in">
+    <div class="hero is-info is-bold">
+        <div class="hero-body">
+            <div class="container">
+                <h1 class="title">Мероприятия</h1>
+                <h2 class="subtitle">Записывайтесь на интересующие вас события</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mt-4">
+        <div class="box">
+            <button class="button is-warning" onclick="loadEvents()">
+                🔄 Принудительно загрузить мероприятия
+            </button>
+        </div>
+
+        <div class="box">
+            <div class="field is-grouped is-grouped-multiline">
+                <div class="control">
+                    <div class="select">
+                        <select id="company-filter">
+                            <option value="">Все компании</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="control is-expanded">
+                    <input class="input" type="text" id="event-search" placeholder="Поиск мероприятий...">
+                </div>
+            </div>
+        </div>
+
+        <div id="events-container">
+            <div class="has-text-centered">
+                <p>Загрузка мероприятий...</p>
+            </div>
+        </div>
+    </div>
+</div>

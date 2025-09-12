@@ -1,0 +1,105 @@
+<div class="fade-in">
+    <div class="container">
+        <div class="hero is-info is-bold mb-4">
+            <div class="hero-body">
+                <h1 class="title">Панель администратора</h1>
+                <h2 class="subtitle">Управление системой</h2>
+            </div>
+        </div>
+
+        <div class="tabs is-boxed">
+            <ul>
+                <li class="admin-tab is-active" data-tab="pending-users">
+                    <a>
+                        <i class="fas fa-users mr-2"></i>Пользователи на модерации
+                    </a>
+                </li>
+                <li class="admin-tab" data-tab="companies">
+                    <a>
+                        <i class="fas fa-building mr-2"></i>Управление компаниями
+                    </a>
+                </li>
+                <li class="admin-tab" data-tab="all-users">
+                    <a>
+                        <i class="fas fa-user-friends mr-2"></i>Все пользователи
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div id="pending-users-tab" class="admin-content">
+            <div class="box">
+                <h3 class="title is-4">Пользователи ожидающие подтверждения</h3>
+                <div id="pending-users-container">
+                    <div class="has-text-centered">
+                        <div class="loader"></div>
+                        <p>Загрузка пользователей...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="companies-tab" class="admin-content" style="display: none;">
+            <div class="box">
+                <div class="level">
+                    <div class="level-left">
+                        <h3 class="title is-4">Управление компаниями</h3>
+                    </div>
+                    <div class="level-right">
+                        <button class="button is-primary" id="create-company-btn">
+                            <i class="fas fa-plus mr-2"></i>Создать компанию
+                        </button>
+                    </div>
+                </div>
+
+                <div class="box is-hidden" id="create-company-form">
+                    <h4 class="title is-5">Создать новую компанию</h4>
+                    <form id="company-form">
+                        <div class="field">
+                            <label class="label">Название компании</label>
+                            <div class="control">
+                                <input class="input" type="text" id="company-name" required>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="label">Описание</label>
+                            <div class="control">
+                                <textarea class="textarea" id="company-description"></textarea>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="control">
+                                <button type="submit" class="button is-success">Создать</button>
+                                <button type="button" class="button is-light" id="cancel-create-company">Отмена</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div id="companies-container">
+                    <div class="has-text-centered">
+                        <div class="loader"></div>
+                        <p>Загрузка компаний...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="all-users-tab" class="admin-content" style="display: none;">
+            <div class="box">
+                <h3 class="title is-4">Все пользователи системы</h3>
+                <div class="field">
+                    <div class="control">
+                        <input class="input" type="text" id="user-search" placeholder="Поиск пользователей...">
+                    </div>
+                </div>
+                <div id="all-users-container">
+                    <div class="has-text-centered">
+                        <div class="loader"></div>
+                        <p>Загрузка пользователей...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

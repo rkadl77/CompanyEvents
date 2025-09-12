@@ -290,7 +290,6 @@ namespace HITS.Services
             if (eventObj == null)
                 return false;
 
-            // Удаляем событие из календарей всех участников
             foreach (var participant in eventObj.Participants)
             {
                 try
