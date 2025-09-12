@@ -32,7 +32,7 @@
 ## 🛠️ Технологический стек
 
 ### Backend
-- **ASP.NET Core 8.0** - основной фреймворк
+- **ASP.NET Core 6.0** - основной фреймворк
 - **Entity Framework Core** - ORM для работы с БД
 - **JWT Authentication** - аутентификация
 - **MySQL** - система управления базами данных
@@ -53,7 +53,7 @@
 ## 🚀 Быстрый старт
 
 ### Предварительные требования
-- .NET 6.0 SDK
+- .NET 8.0 SDK
 - MySQL Server 8.0
 - Telegram Bot Token
 - Google OAuth Credentials
@@ -62,8 +62,8 @@
 
 ```bash
 # Клонирование репозитория
-git clone https://github.com/your-username/hits-events.git
-cd hits-events/HITS
+git clone https://github.com/rkadl77/CompanyEvents.git
+cd CompanyEvents/HITS
 
 # Настройка базы данных
 dotnet ef database update
