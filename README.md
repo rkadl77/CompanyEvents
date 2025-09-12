@@ -1,8 +1,7 @@
 # 🎓 HITS Events - Система управления мероприятиями
 
 ![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)
-![ASP.NET Core](https://img.shields.io/badge/ASP.NET_Core-6.0-purple.svg)
-![License](https://img.shields.io/badge/license-MIT-yellow.svg)
+![ASP.NET Core](https://img.shields.io/badge/ASP.NET_Core-8.0-purple.svg)
 
 **Платформа для организации мероприятий вуза с интеграцией Google Calendar и Telegram ботом**
 
